@@ -14,7 +14,7 @@ export default function GoogleForm({ provider }: { provider: ClientSafeProvider 
             startIcon={<FontAwesomeIcon icon={faGoogle} />}
             onClick={() => {signIn(provider.id, { callbackUrl: '/' })}}
         >
-            Sign in
+            Sign in with Google
         </Button>
     )
 }

@@ -1,5 +1,7 @@
 import NextAuth from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
+import CredentialsProvider from "next-auth/providers/credentials"
+import User from "@/src/auth/models/User";
 // For more information on each option (and a full list of options) go to
 // https://next-auth.js.org/configuration/options
 
@@ -10,6 +12,29 @@ export default NextAuth({
       clientId: process.env.GOOGLE_ID?process.env.GOOGLE_ID:"",
       clientSecret: process.env.GOOGLE_SECRET?process.env.GOOGLE_SECRET:"",
     }),
+    CredentialsProvider({
+      // The name to display on the sign in form (e.g. "Sign in with...")
+      name: "Credentials",
+      // `credentials` is used to generate a form on the sign in page.
+      // You can specify which fields should be submitted, by adding keys to the `credentials` object.
+      // e.g. domain, username, password, 2FA token, etc.
+      // You can pass any HTML attribute to the <input> tag through the object.
+      credentials: {
+        username: { label: "Username", type: "text" },
+        password: { label: "Password", type: "password" }
+      },
+      async authorize(credentials, req) {
+        if(credentials?.username === "admin" && credentials?.password === "admin"){
+          let newUser = new User();
+          newUser.image = "https://us.123rf.com/450wm/anatolir/anatolir2011/anatolir201105528/159470802-jurist-avatar-icon-flat-style.jpg?ver=6";
+          newUser.name = "Admin";
+          newUser.email = "admin@localhost.com";
+          return newUser;
+        }else{
+          return null;
+        }
+      }
+    })
   ],
   // Database optional. MySQL, Maria DB, Postgres and MongoDB are supported.
   // https://next-auth.js.org/configuration/databases
@@ -59,7 +84,7 @@ export default NextAuth({
   // pages is not specified for that route.
   // https://next-auth.js.org/configuration/pages
   pages: {
-    signIn: '/auth/signin',  // Displays signin buttons
+    signIn: '/sign-in',  // Displays signin buttons
     // signOut: '/auth/signout', // Displays form with sign out button
     // error: '/auth/error', // Error code passed in query string as ?error=
     // verifyRequest: '/auth/verify-request', // Used for check email page

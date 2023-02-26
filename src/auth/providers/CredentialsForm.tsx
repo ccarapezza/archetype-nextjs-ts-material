@@ -10,6 +10,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faKey } from '@fortawesome/free-solid-svg-icons';
+import { Button, TextField } from '@mui/material';
 
 interface IRegisterForm {
     username: string,
@@ -43,17 +44,22 @@ export default function CredentialsForm({ provider }: { provider: ClientSafeProv
         }
         <form onSubmit={handleSubmit(onSubmit)}>
             <div>
-                <input {...register("username")} type="text" placeholder='Username'/>
+                <TextField size="small" {...register("username")} placeholder='Username' />
                 <small style={{color: "red", display: "block", marginBottom: "15px"}}>{errors.username?.message}</small>
             </div>
             <div>
-                <input {...register("password")} type="password" placeholder='Password'/>
+                <TextField size="small" {...register("password")} type="password" placeholder='Password' />
                 <small style={{color: "red", display: "block", marginBottom: "15px"}}>{errors.password?.message}</small>
             </div>
             <div>
-                <button type='submit'>
-                    <FontAwesomeIcon icon={faKey} /> Sign in
-                </button>
+                <Button
+                    type='submit'
+                    className='mb-2 self-center w-fit'
+                    variant='outlined'
+                    color='secondary'
+                    startIcon={<FontAwesomeIcon icon={faKey} />}>
+                    Sign in
+                </Button>
             </div>
             <div>
                 <small>Haven't an account? <Link href={'/auth/register'}>Sign Up</Link></small>
