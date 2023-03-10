@@ -64,9 +64,9 @@ export default function ProtectedPage() {
             </Typography>
             <strong>{content ?? "\u00a0"}</strong>
             <Box maxWidth="sm">
-            <Button variant="contained" component={Link} noLinkStyle href="/">
-                Go to the home page
-            </Button>
+                <Button variant="contained" component={Link} noLinkStyle href="/">
+                    Go to the home page
+                </Button>
             </Box>
             <Copyright />
         </Box>
