@@ -1,11 +1,16 @@
-import NextAuth from "next-auth"
+import NextAuth, { NextAuthOptions }  from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
 import CredentialsProvider from "next-auth/providers/credentials"
-import User from "@/src/auth/models/User";
+//import SequelizeAdapter from "@/src/auth/adapters/SequelizeAdapter";
 // For more information on each option (and a full list of options) go to
 // https://next-auth.js.org/configuration/options
+//import SequelizeAdapter from "@next-auth/sequelize-adapter"
+import { adapter } from "@/src/db/index"
+import bcrypt from 'bcryptjs';
+import { User } from "@/src/db";
 
-export default NextAuth({
+export const authOptions: NextAuthOptions = {
+  adapter,
   // https://next-auth.js.org/configuration/providers
   providers: [
     GoogleProvider({
@@ -24,14 +29,19 @@ export default NextAuth({
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials, req) {
-        if(credentials?.username === "admin" && credentials?.password === "admin"){
-          let newUser = new User();
-          newUser.image = "https://us.123rf.com/450wm/anatolir/anatolir2011/anatolir201105528/159470802-jurist-avatar-icon-flat-style.jpg?ver=6";
-          newUser.name = "Admin";
-          newUser.email = "admin@localhost.com";
-          return newUser;
-        }else{
-          return null;
+        const user = await User.findOne({
+          where: {
+            name: credentials?.username 
+          }
+        });
+
+        if (user && bcrypt.compareSync(credentials?.password!, user?.password!)) {
+          // Any object returned will be saved in `user` property of the JWT
+          return user;
+        } else {
+          // If you return null then an error will be displayed advising the user to check their details.
+          return null
+          // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
         }
       }
     })
@@ -84,7 +94,7 @@ export default NextAuth({
   // pages is not specified for that route.
   // https://next-auth.js.org/configuration/pages
   pages: {
-    signIn: '/sign-in',  // Displays signin buttons
+    signIn: '/auth/sign-in',  // Displays signin buttons
     // signOut: '/auth/signout', // Displays form with sign out button
     // error: '/auth/error', // Error code passed in query string as ?error=
     // verifyRequest: '/auth/verify-request', // Used for check email page
@@ -99,12 +109,29 @@ export default NextAuth({
       session.id = user.id;
       return Promise.resolve(session);
     },*/
-    // async signIn({ user, account, profile, email, credentials }) { return true },
+    async signIn({ user, account, profile, email, credentials }) {
+      console.log("########-signIn", user, account, profile, email, credentials);
+      const isAllowedToSignIn = true
+      if (isAllowedToSignIn) {
+        return true
+      } else {
+        // Return false to display a default error message
+        return false
+        // Or you can return a URL to redirect to:
+        // return '/unauthorized'
+      }
+    },
     async redirect({ url, baseUrl }) {
       return Promise.resolve(baseUrl);
     },
-    // async session({ session, user, token}) { return session },
-    // async jwt({ token, user, account, profile, isNewUser }) { return token }
+    async jwt({ token, user, account, profile, isNewUser }) {
+      console.log("########-jwt", token, user, account, profile, isNewUser);
+      return token
+    },
+    async session({ session, user, token}) {
+      console.log("########-session", session, user, token);
+      return session
+    }
   },
 
   // Events are useful for logging
@@ -114,4 +141,6 @@ export default NextAuth({
   // Enable debug messages in the console if you are having problems
   debug: false,
 
-})
+}
+
+export default NextAuth(authOptions)

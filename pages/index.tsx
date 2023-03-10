@@ -31,7 +31,7 @@ export default function Home() {
             variant='outlined'
             color='secondary'
             startIcon={<FontAwesomeIcon icon={faSignIn} />}
-            href="/sign-in"
+            href="/auth/sign-in"
           >
             Sign In
           </Button>
@@ -72,6 +72,9 @@ export default function Home() {
         )}
         <Link href="/about" color="secondary" className="m-2">
           Go to the About page
+        </Link>
+        <Link href="/protected" color="secondary" className="m-2">
+          Go to the Protected page
         </Link>
         <MainInfoCard/>
         <Copyright />

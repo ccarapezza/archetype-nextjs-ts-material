@@ -1,4 +1,4 @@
-import ProvidersForms from "@/src/auth/ProvidersForms";
+import ProvidersForms from "@/src/components/auth/ProvidersForms";
 import { getProviders } from "next-auth/react"
 import type { GetServerSidePropsContext } from "next"
 import type { ClientSafeProvider, LiteralUnion } from "next-auth/react/types";

@@ -2,7 +2,7 @@ import React from 'react'
 import { signIn } from "next-auth/react"
 import { ClientSafeProvider } from "next-auth/react/types"
 import { useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/router'
 import { useEffect } from 'react';
 import Link from 'next/link';
 import { useForm } from "react-hook-form";
@@ -23,7 +23,8 @@ const schema = yup.object({
 }).required();
 
 export default function CredentialsForm({ provider }: { provider: ClientSafeProvider } ) {
-    const searchParams = useSearchParams();
+    //const searchParams = useSearchParams();
+    const router = useRouter()
     const [errorParam, setErrorParam] = useState("");
 
     const { register, handleSubmit, formState: { errors } } = useForm<IRegisterForm>({
@@ -32,11 +33,13 @@ export default function CredentialsForm({ provider }: { provider: ClientSafeProv
     const onSubmit = async (data: IRegisterForm) => {
         signIn(provider.id, { username: data.username, password: data.password });
     };
+    
     useEffect(() => {
-        if(searchParams.get("error")){
-            setErrorParam(searchParams.get("error")!);
+        const { error } = router.query;
+        if(typeof error === "string" || error instanceof String){
+            setErrorParam(error as string);
         }
-    }, [setErrorParam, searchParams])
+    }, [setErrorParam, router.query])
     
     return (<>
         {errorParam&&
