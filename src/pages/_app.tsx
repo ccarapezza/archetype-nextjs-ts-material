@@ -5,9 +5,10 @@ import { SessionProvider } from "next-auth/react"
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { CacheProvider, EmotionCache } from '@emotion/react';
-import theme from '../src/theme';
-import createEmotionCache from '../src/createEmotionCache';
-import "../styles/globals.css";
+import theme from '@/src/theme';
+import createEmotionCache from '@/src/createEmotionCache';
+import "@/styles/globals.css";
+import Layout from '../components/layout/Layout';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -26,7 +27,9 @@ export default function App({ Component, emotionCache = clientSideEmotionCache, 
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
         <SessionProvider session={pageProps.session}>
-          <Component {...pageProps} />
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
         </SessionProvider>
       </ThemeProvider>
     </CacheProvider>

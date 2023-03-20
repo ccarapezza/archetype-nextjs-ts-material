@@ -26,7 +26,6 @@ export default function About() {
             Go to the home page
           </Button>
         </Box>
-        <Copyright />
       </Box>
     </Container>
   );

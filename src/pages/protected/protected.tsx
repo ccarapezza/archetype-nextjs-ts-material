@@ -50,26 +50,25 @@ export default function ProtectedPage() {
     // If session exists, display content
     return (
         <Container maxWidth="lg">
-        <Box
-            sx={{
-            my: 4,
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            }}
-        >
-            <Typography variant="h4" component="h1" gutterBottom>
-                Protected Page
-            </Typography>
-            <strong>{content ?? "\u00a0"}</strong>
-            <Box maxWidth="sm">
-                <Button variant="contained" component={Link} noLinkStyle href="/">
-                    Go to the home page
-                </Button>
+            <Box
+                sx={{
+                    my: 4,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }}
+            >
+                <Typography variant="h4" component="h1" gutterBottom>
+                    Protected Page
+                </Typography>
+                <strong>{content ?? "\u00a0"}</strong>
+                <Box maxWidth="sm">
+                    <Button variant="contained" component={Link} noLinkStyle href="/">
+                        Go to the home page
+                    </Button>
+                </Box>
             </Box>
-            <Copyright />
-        </Box>
         </Container>
     )
 }

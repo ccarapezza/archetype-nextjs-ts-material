@@ -30,6 +30,7 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials, req) {
         const user = await User.findOne({
+          include: ["roles"],
           where: {
             name: credentials?.username 
           }
@@ -37,7 +38,16 @@ export const authOptions: NextAuthOptions = {
 
         if (user && bcrypt.compareSync(credentials?.password!, user?.password!)) {
           // Any object returned will be saved in `user` property of the JWT
-          return user;
+          const userJson = user.toJSON();
+
+          return {
+            id: userJson.id,
+            name: userJson.name,
+            email: userJson.email,
+            image: userJson.image,
+            emailVerified: userJson.emailVerified,
+            roles: userJson.roles?.map((role: any) => role.name)
+          };
         } else {
           // If you return null then an error will be displayed advising the user to check their details.
           return null
@@ -57,7 +67,7 @@ export const authOptions: NextAuthOptions = {
   // The secret should be set to a reasonably long random string.
   // It is used to sign cookies and to sign and encrypt JSON Web Tokens, unless
   // a separate secret is defined explicitly for encrypting the JWT.
-  secret: process.env.SECRET,
+  secret: process.env.NEXTAUTH_SECRET,
 
   session: {
     // Use JSON Web Tokens for session instead of database sessions.
@@ -79,7 +89,7 @@ export const authOptions: NextAuthOptions = {
   // https://next-auth.js.org/configuration/options#jwt
   jwt: {
     // A secret to use for key generation (you should set this explicitly)
-    secret: process.env.SECRET,
+    secret: process.env.NEXTAUTH_SECRET,
     // Set to true to use encryption (default: false)
     // encryption: true,
     // You can define your own encode/decode functions for signing and encryption
@@ -105,6 +115,25 @@ export const authOptions: NextAuthOptions = {
   // when an action is performed.
   // https://next-auth.js.org/configuration/callbacks
   callbacks: {
+    async jwt({ token, user }) {
+      /* Step 1: update the token based on the user object */
+      if (user) {
+        token.roles = (user as any)?.roles;
+      }
+      return token;
+    },
+    session({ session, token }) {
+      /* Step 2: update the session.user based on the token object */
+      /*
+      if (token && session.user) {
+        session.user.role = token.role;
+      }
+      */
+      return session;
+    },
+
+
+
     /*session: async (session, user) => {
       session.id = user.id;
       return Promise.resolve(session);
@@ -124,6 +153,7 @@ export const authOptions: NextAuthOptions = {
     async redirect({ url, baseUrl }) {
       return Promise.resolve(baseUrl);
     },
+    /*
     async jwt({ token, user, account, profile, isNewUser }) {
       console.log("########-jwt", token, user, account, profile, isNewUser);
       return token
@@ -132,6 +162,7 @@ export const authOptions: NextAuthOptions = {
       console.log("########-session", session, user, token);
       return session
     }
+    */
   },
 
   // Events are useful for logging

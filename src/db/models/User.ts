@@ -1,10 +1,12 @@
 
 import { AdapterUser } from "next-auth/adapters";
-import { Column, DataType, Model, Table } from "sequelize-typescript";
+import { BelongsToMany, Column, DataType, Model, Table } from "sequelize-typescript";
 import { User as UserDefinition } from "@next-auth/sequelize-adapter/dist/models";
+import Role from "./Role";
 
 interface CustomAdapterUser extends AdapterUser {
   password?: string;
+  roles?: Role[];
 }
 
 @Table({
@@ -30,4 +32,11 @@ export default class User extends Model<CustomAdapterUser, Partial<CustomAdapter
 
   @Column({...UserDefinition.image})
   public image?: string | null | undefined;
+
+  @BelongsToMany(() => Role, {
+    through: 'user_roles',
+    foreignKey: 'userId',
+    otherKey: 'roleId',
+  })
+  public roles?: Role[];
 }

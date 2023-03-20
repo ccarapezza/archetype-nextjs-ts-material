@@ -1,6 +1,6 @@
 // This is an example of to protect an API route
 import { getServerSession } from "next-auth/next"
-import { authOptions } from "@/pages/api/auth/[...nextauth]"
+import { authOptions } from "@/src/pages/api/auth/[...nextauth]"
 
 import type { NextApiRequest, NextApiResponse } from "next"
 
