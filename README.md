@@ -65,4 +65,8 @@ npx sequelize-cli db:drop
 
 Tener en cuenta que la conexión utilizada para las operaciones de Sequelize CLI se realizará con los datos especificados en `/db/config/config.js` y según la variable de entorno `NODE_ENV`
 
+## Chat - Socket.Io
+
+Chat entre usuarios implementado utilizando Socket.IO. Más especificaciones próximamente.
+
 Proyecto creado con Node v18.12.1
