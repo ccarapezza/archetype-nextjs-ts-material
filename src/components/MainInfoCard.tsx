@@ -35,7 +35,7 @@ export default function MainInfoCard() {
   };
 
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card >
       <CardHeader
         
         action={
@@ -46,7 +46,7 @@ export default function MainInfoCard() {
         title={<Typography variant="h5" component="h1" gutterBottom>MUI v5 + Next.js with TS Archetype</Typography>}
         subheader={<h4 className="text-red-500">(and Tailwind CSS)</h4>}
       />
-      <Image src="https://picsum.photos/500/300" width={500} height={200} alt={''} />
+      <Image src="https://dev-to-uploads.s3.amazonaws.com/i/adcvmgs9lja0i6f1u1p3.jpg" width={500} height={200} alt={''} />
       <CardContent>
         <Typography variant="body2" color="text.secondary">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque hendrerit nulla lectus, vitae dapibus tortor tincidunt eget. Mauris posuere sem nec luctus hendrerit. Morbi volutpat nec metus sed molestie. Suspendisse laoreet et turpis at fringilla. Aliquam pellentesque a diam et iaculis. Aenean suscipit dui vel enim sodales pellentesque nec in orci. In pharetra ex ut ipsum interdum facilisis. Quisque id tempor odio. Curabitur eu commodo ex, at convallis lectus. Aliquam quis nisi sodales, vehicula quam suscipit, hendrerit massa. Vivamus ligula dui, dapibus at quam in, convallis ornare justo. Proin finibus lectus quam, nec vestibulum nulla volutpat vel. Sed vitae condimentum neque.

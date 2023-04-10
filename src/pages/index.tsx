@@ -15,16 +15,8 @@ import { faSignIn } from '@fortawesome/free-solid-svg-icons';
 export default function Home() {
   const { data: session, status } = useSession();
   return (
-    <Container maxWidth="lg">
-      <Box
-        sx={{
-          my: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
+    <Container>
+      <Box className='flex flex-col justify-center items-center my-5'>
         {!session && (
           <Button
             className='mb-2 self-center w-fit'

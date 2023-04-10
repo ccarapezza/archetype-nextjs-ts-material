@@ -1,23 +1,28 @@
-import * as React from 'react';
+import { Fragment } from 'react';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Link from '@/src/components/Link';
-import Copyright from '@/src/components/Copyright';
+import PageHeader from '../components/PageHeader';
+import { IconButton, Tooltip } from '@mui/material';
+import { Help as HelpIcon } from '@mui/icons-material';
 
 export default function About() {
-  return (
+  return (<Fragment>
+    <PageHeader
+      title="About"
+      className="bg-[#0089e5]"
+      toolbar={
+        <Tooltip title="Help">
+            <IconButton color="inherit">
+                <HelpIcon />
+            </IconButton>
+        </Tooltip>
+      }
+    />
     <Container maxWidth="lg">
-      <Box
-        sx={{
-          my: 4,
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
+      <Box className="flex flex-col justify-center items-center my-4">
         <Typography variant="h4" component="h1" gutterBottom>
           About page...
         </Typography>
@@ -28,5 +33,6 @@ export default function About() {
         </Box>
       </Box>
     </Container>
+  </Fragment>
   );
 }

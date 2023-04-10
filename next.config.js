@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   images: {
     remotePatterns: [
       {
@@ -9,6 +9,13 @@ const nextConfig = {
         port: '',
         pathname: '/**/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'dev-to-uploads.s3.amazonaws.com',
+        port: '',
+        pathname: '/**/**',
+      },
+      
     ],
   },
   publicRuntimeConfig: {

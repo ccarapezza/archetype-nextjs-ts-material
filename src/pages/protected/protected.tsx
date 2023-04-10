@@ -4,7 +4,6 @@ import Container from "@mui/material/Container"
 import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
 import Typography from "@mui/material/Typography"
-import Copyright from "@/src/components/Copyright"
 import Link from "@/src/components/Link"
 import { protectedService } from '@/src/services';
 

@@ -86,8 +86,8 @@ export default function Navigator(props: DrawerProps) {
                 </ListItemText>
               </ListItem>
               {children?.map(({ id: childId, icon, url: childUrl }) => (
-                <Link href={childUrl!}>
-                  <ListItem disablePadding key={childId}>
+                <Link key={id+"-"+childId} href={childUrl!}>
+                  <ListItem disablePadding>
                     <ListItemButton selected={false} sx={itemSx}>
                       {icon &&
                         <ListItemIcon>{icon}</ListItemIcon>
@@ -100,7 +100,7 @@ export default function Navigator(props: DrawerProps) {
               <Divider sx={{ mt: 2 }} />
             </Box>
           ) : (
-            <Link href={url!}>
+            <Link key={id} href={url!}>
               <ListItem sx={{ ...itemSx, ...itemCategorySx }}>
                 {icon &&
                   <ListItemIcon>{icon}</ListItemIcon>

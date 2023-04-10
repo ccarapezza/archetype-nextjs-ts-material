@@ -5,18 +5,22 @@ import Navigator from './Navigator';
 import Header from './Header';
 import theme from '@/src/theme';
 import Copyright from '../Copyright';
+import FloatingDiv from '../FloatingWindow';
+import GlobalChatBox from '../GlobalChatBox';
+import { useSession } from "next-auth/react"
 
 const drawerWidth = 256;
 
 export default function Layout({ children } : { children: React.ReactNode }) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const isSmUp = useMediaQuery(theme.breakpoints.up('sm'));
+  const { data: session } = useSession();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
-  return (
+  return (<>
     <Box sx={{ display: 'flex', minHeight: '100vh' }}>
         <Box
             component="nav"
@@ -37,7 +41,7 @@ export default function Layout({ children } : { children: React.ReactNode }) {
         </Box>
         <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
             <Header onDrawerToggle={handleDrawerToggle} />
-            <Box component="main" sx={{ flex: 1, py: 6, px: 4, bgcolor: '#eaeff1' }}>
+            <Box component="main" sx={{ flex: 1, bgcolor: '#eaeff1' }}>
                 { children }
             </Box>
             <Box component="footer" sx={{ p: 2, bgcolor: '#eaeff1' }}>
@@ -45,5 +49,11 @@ export default function Layout({ children } : { children: React.ReactNode }) {
             </Box>
         </Box>
     </Box>
+    {session&&
+        <FloatingDiv key="chat-window" title='Chat'>
+            <GlobalChatBox/>
+        </FloatingDiv>
+    }
+  </>
   );
 }
