@@ -1,13 +1,16 @@
-import * as React from 'react';
+import React, {useContext} from 'react';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Box from '@mui/material/Box';
 import Navigator from './Navigator';
 import Header from './Header';
 import theme from '@/src/theme';
 import Copyright from '../Copyright';
-import FloatingDiv from '../FloatingWindow';
-import GlobalChatBox from '../GlobalChatBox';
 import { useSession } from "next-auth/react"
+import MainChatBox from '../chat/MainChatBox';
+import FloatingArea from '../FloatingArea';
+import ChatContextProvider from '../chat/ChatContext';
+import P2PChatBox from '../chat/P2PChatBox';
+import ChatBoxManager from '../chat/ChatBoxManager';
 
 const drawerWidth = 256;
 
@@ -19,6 +22,7 @@ export default function Layout({ children } : { children: React.ReactNode }) {
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+
 
   return (<>
     <Box sx={{ display: 'flex', minHeight: '100vh' }}>
@@ -50,9 +54,12 @@ export default function Layout({ children } : { children: React.ReactNode }) {
         </Box>
     </Box>
     {session&&
-        <FloatingDiv key="chat-window" title='Chat'>
-            <GlobalChatBox/>
-        </FloatingDiv>
+        <ChatContextProvider>
+            <FloatingArea>               
+                <ChatBoxManager/>
+                <MainChatBox/>
+            </FloatingArea>
+        </ChatContextProvider>
     }
   </>
   );

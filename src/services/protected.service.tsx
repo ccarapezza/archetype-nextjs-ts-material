@@ -8,7 +8,6 @@ export const protectedService = {
 };
 
 function _protected() {
-    console.log("publicRuntimeConfig ",publicRuntimeConfig)
     return fetchWrapper.post(`${publicRuntimeConfig.apiUrl}/api/protected/protected`)
     .then(async res => {
         if(res.ok){

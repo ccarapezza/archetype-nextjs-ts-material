@@ -8,6 +8,8 @@ import CredentialsProvider from "next-auth/providers/credentials"
 import { adapter } from "@/src/db/index"
 import bcrypt from 'bcryptjs';
 import { User } from "@/src/db";
+import jwt from "jsonwebtoken";
+import { JWT } from "next-auth/jwt";
 
 export const authOptions: NextAuthOptions = {
   adapter,
@@ -87,6 +89,7 @@ export const authOptions: NextAuthOptions = {
   // JSON Web tokens are only used for sessions if the `strategy: 'jwt'` session
   // option is set - or by default if no database is specified.
   // https://next-auth.js.org/configuration/options#jwt
+  
   jwt: {
     // A secret to use for key generation (you should set this explicitly)
     secret: process.env.NEXTAUTH_SECRET,
@@ -94,8 +97,15 @@ export const authOptions: NextAuthOptions = {
     // encryption: true,
     // You can define your own encode/decode functions for signing and encryption
     // if you want to override the default behaviour.
-    // encode: async ({ secret, token, maxAge }) => {},
-    // decode: async ({ secret, token, maxAge }) => {},
+    /*
+    encode: async ({ secret, token, maxAge }) => {
+      return jwt.sign(token!, secret)
+    },
+    /*
+    decode: async ({ secret, token }) => {
+      return jwt.verify(token!, secret) as JWT
+    },
+    */
   },
 
   // You can define custom pages to override the built-in ones. These will be regular Next.js pages

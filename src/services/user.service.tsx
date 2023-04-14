@@ -21,7 +21,6 @@ class UserRegistration{
 }
 
 function register(user: UserRegistration) {
-    console.log("publicRuntimeConfig ",publicRuntimeConfig)
     return fetchWrapper.post(`${publicRuntimeConfig.apiUrl}/api/auth/signup`, user)
     .then(async res => {
         if(res.ok){
