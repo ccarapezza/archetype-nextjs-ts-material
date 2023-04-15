@@ -31,12 +31,12 @@ const CardWindow: React.FC<Props> = ({ title, onClose, onMinimize, children, cla
   };
 
   const rootClasses = `shadow-lg transition-transform ease-out transform rounded ${
-    isMinimized ? 'translate-y-8' : ''
-  } ${className}`;
+    isMinimized ? 'translate-y-8' : className
+  }`;
 
   const headerClasses = `flex items-center justify-between px-4 py-2 bg-${color}-500 text-white rounded-t`;
 
-  const contentClasses = 'px-4 py-2';
+  const contentClasses = 'px-0 py-0';
 
   return (
     <Paper className={rootClasses} elevation={3}>

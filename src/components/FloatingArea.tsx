@@ -7,7 +7,7 @@ interface Props {
 const FloatingArea: React.FC<Props> = ({children}) => {
 
   return (
-    <div className="fixed bottom-8 right-8 z-100 flex flex-row gap-x-4 bg-transparent">
+    <div className="fixed bottom-8 right-8 z-100 flex flex-row items-end gap-x-4 bg-transparent">
       {children}
     </div>
   );

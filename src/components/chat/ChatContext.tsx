@@ -13,9 +13,11 @@ interface ChatContextType {
   chats: Chat[];
   openedChats: Chat[],
   usersList: User[],
+  user: User | undefined,
   openChat: (user: User) => void;
   closeChat: (user: User) => void;
   sendMessage: (receiverId: string, message: string) => void;
+  updateStatus: (status: UserChatState) => void;
 }
 
 interface ChatContextProviderProps {
@@ -27,13 +29,16 @@ export const ChatContext = createContext<ChatContextType>({
   chats: [],
   openedChats: [],
   usersList: [],
+  user: undefined,
   openChat: () => { },
   closeChat: () => { },
   sendMessage: () => { },
+  updateStatus: () => { },
 });
 
 const ChatContextProvider = ({ children }: ChatContextProviderProps) => {
   const { data: session } = useSession();
+  const [user, setUser] = useState<User>();
   const [usersList, setUsersList] = useState<User[]>([]);
   const [chats, setChats] = useState<Chat[]>([]);
   const [openedChats, setOpenedChats] = useState<Chat[]>([]);
@@ -61,12 +66,13 @@ const ChatContextProvider = ({ children }: ChatContextProviderProps) => {
     socket.on(SocketEvent.USER_LIST, (users: User[]) => {
       // we get the data here
       console.log(users);
+      setUser(users?.find(user => user.email === session?.user?.email));
       setUsersList(users?.filter(user => user.email !== session?.user?.email));
     });
   }
 
   useEffect(() => {
-    if(socket){
+    if (socket) {
       socket.off(SocketEvent.P2P_CHAT_MSG_CREATED);
       socket.on(SocketEvent.P2P_CHAT_MSG_CREATED, messageReceivedSimple);
     }
@@ -108,8 +114,8 @@ const ChatContextProvider = ({ children }: ChatContextProviderProps) => {
     setOpenedChatIds(openedChatIds.filter((email) => email !== receiverUser.email));
   };
 
-  const addMessage = (message: Message, receiverEmail: string|null = null) => {
-    if(!receiverEmail){
+  const addMessage = (message: Message, receiverEmail: string | null = null) => {
+    if (!receiverEmail) {
       receiverEmail = message.sender.email;
     }
     setChats(oldChats => {
@@ -126,13 +132,28 @@ const ChatContextProvider = ({ children }: ChatContextProviderProps) => {
   };
 
   const sendMessage = (receiverEmail: string, message: string) => {
-    socket.emit(SocketEvent.P2P_CHAT_MSG, receiverEmail, message, (message:Message) => {
+    socket.emit(SocketEvent.P2P_CHAT_MSG, receiverEmail, message, (message: Message) => {
       addMessage(message, receiverEmail);
     });
   };
 
+  const updateStatus = (status: UserChatState) => {
+    socket.emit(SocketEvent.UPDATE_STATUS, status);
+  };
+
   return (
-    <ChatContext.Provider value={{connected, chats, openChat, closeChat, sendMessage, openedChats, usersList }}>
+    <ChatContext.Provider
+      value={{
+        connected,
+        chats,
+        openChat,
+        closeChat,
+        user,
+        sendMessage,
+        openedChats,
+        usersList,
+        updateStatus
+      }}>
       {children}
     </ChatContext.Provider>
   );

@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Avatar, Box, Divider, IconButton, List, ListItem, ListItemAvatar, ListItemText, Paper, TextField, Typography } from '@mui/material';
 import { Close, Send } from '@mui/icons-material';
 import { ChatContext } from './ChatContext';
@@ -14,7 +14,11 @@ interface MessageProps {
 }
 // component
 const P2PChatBox: React.FC<Props> = ({ chat }) => {
-    const [message, setMessage] = useState<string>('');
+    const listRef = useRef<HTMLElement>(null);
+    const formInputRef = useRef<HTMLFormElement>(null);
+    const messageInputRef = useRef<HTMLInputElement>(null);
+    const [sendDisabled, setSendDisabled] = useState<boolean>(true);
+    //const [message, setMessage] = useState<string>('');
     const chatContext = useContext(ChatContext);
 
     const IncommingMessage: React.FC<MessageProps> = ({message}) => {
@@ -52,18 +56,24 @@ const P2PChatBox: React.FC<Props> = ({ chat }) => {
     };
 
     const sendMessage = () => {
+        const message = messageInputRef.current?.value;
         if (message) {
             chatContext.sendMessage(chat.user.email, message);
-            setMessage('');
+            setSendDisabled(true);
+            formInputRef.current?.reset();
         }
     };
 
+    useEffect(() => {
+        listRef.current?.scrollTo(0, listRef.current?.scrollHeight);
+    }, [chat.messages]);
+
     return (
-        <Paper className="flex flex-col bg-white" elevation={4}>
+        <Paper className="flex flex-col bg-white h-96" elevation={4}>
             {/* Header */}
             <Box className="h-14 bg-blue-500 text-white flex items-center justify-between px-4 rounded-t">
                 <Box className="flex items-center">
-                    <ChatAvatar src={chat.user.avatar!} alt={chat.user.name} state={chat.user.status}>{chat.user.name[0].toUpperCase()}</ChatAvatar>
+                    <ChatAvatar src={chat.user.avatar!} alt={chat.user.name} state={chat.user.status}>{chat.user.name?.charAt(0).toUpperCase()}</ChatAvatar>
                     <Typography variant="subtitle1" className="ml-4">
                         {chat.user.name}
                     </Typography>
@@ -76,8 +86,8 @@ const P2PChatBox: React.FC<Props> = ({ chat }) => {
             </Box>
 
             {/* Chat container */}
-            <Box className="flex-1 overflow-y-auto p-4">
-                <List>
+            <Box ref={listRef} className="flex-1 overflow-y-auto p-4 py-0">
+                <List className='pb-0'>
                     {chat.messages.map((message, index) => {
                         if (message.sender.email !== chat.user.email) {
                             return <OutgoingMessage key={"outgoing-"+index} message={message}/>
@@ -89,20 +99,17 @@ const P2PChatBox: React.FC<Props> = ({ chat }) => {
             </Box>
 
             {/* Input container */}
-            <Box className="h-16 bg-gray-100 flex items-center px-4 rounded-b">
+            <Box ref={formInputRef} onSubmit={(e)=>{sendMessage(); e.preventDefault(); }} component="form" autoComplete="off" className="h-16 bg-gray-100 flex items-center px-4 rounded-b">
                 <TextField
                     size='small'
                     className="flex-1 mr-4 bg-white border border-gray-400 rounded mr-2 my-2"
                     type="text" placeholder="Type a message..."
-                    value={message}
-                    onChange={(e) => { setMessage(e.target.value) }}
-                    onKeyDown={(e) => {
-                        if (e.key === "Enter") {
-                            sendMessage();
-                        }
+                    inputRef={messageInputRef}
+                    onChange={(e) => {
+                        setSendDisabled(e.target.value?false:true);
                     }}
                 />
-                <IconButton aria-label="Expand" onClick={() => { sendMessage() }} disabled={message === ""} >
+                <IconButton aria-label="Expand" onClick={()=>{sendMessage()}} disabled={sendDisabled} >
                     <Send />
                 </IconButton>
             </Box>
@@ -111,34 +118,3 @@ const P2PChatBox: React.FC<Props> = ({ chat }) => {
 }
 
 export default P2PChatBox;
-/*
-import React, { useContext } from "react";
-import CardWindow from "../CardWindow";
-import { ChatContext } from "./ChatContext";
-import { Chat } from "@/src/socket/socketModels";
-import ChatAvatar from "./ChatAvatar";
-import { Box, Typography } from "@mui/material";
-
-interface Props {
-    chat: Chat;
-}
-// component
-const P2PChatBox: React.FC<Props> = ({chat}) => {
-
-    const chatContext = useContext(ChatContext);
-
-    return (
-        <CardWindow onClose={()=>chatContext.closeChat(chat.user)} title={
-            <Box className="flex justify-center items-center">
-                <ChatAvatar alt={chat.user.name} src={chat.user.avatar!} state={chat.user.status}>{chat.user.name[0].toUpperCase()}</ChatAvatar>
-                <Typography component="span" variant="subtitle1" color="text-gray" className="pl-2">
-                    {chat.user.name}
-                </Typography>
-            </Box>
-        }>
-        </CardWindow>
-    );
-};
-
-export default P2PChatBox;
-*/

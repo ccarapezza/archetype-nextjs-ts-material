@@ -4,13 +4,13 @@ import { ClientSafeProvider } from "next-auth/react/types"
 import { useState } from 'react';
 import { useRouter } from 'next/router'
 import { useEffect } from 'react';
-import Link from 'next/link';
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faKey } from '@fortawesome/free-solid-svg-icons';
 import { Button, TextField } from '@mui/material';
+import Link from '@/src/components/Link';
 
 interface IRegisterForm {
     username: string,
@@ -47,11 +47,11 @@ export default function CredentialsForm({ provider }: { provider: ClientSafeProv
         }
         <form onSubmit={handleSubmit(onSubmit)}>
             <div>
-                <TextField size="small" {...register("username")} placeholder='Username' />
+                <TextField fullWidth size="small" {...register("username")} placeholder='Username'/>
                 <small style={{color: "red", display: "block", marginBottom: "15px"}}>{errors.username?.message}</small>
             </div>
             <div>
-                <TextField size="small" {...register("password")} type="password" placeholder='Password' />
+                <TextField fullWidth size="small" {...register("password")} type="password" placeholder='Password' />
                 <small style={{color: "red", display: "block", marginBottom: "15px"}}>{errors.password?.message}</small>
             </div>
             <div>

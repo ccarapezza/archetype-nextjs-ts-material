@@ -13,46 +13,34 @@ import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 
 export default function ProvidersForms({ providers }: { providers: Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider> } ) {
 
-    return (
-        <Container maxWidth="lg">
-            <Card className='m-2'>
-                <CardHeader title="Sign in" />
-                <CardContent>
-                    {providers && Object.values(providers).map((provider, index) => (
-                        <Fragment key={provider?.name}>
-                            {index!==0 && <Divider className='my-4'/>}
-                            <Typography className='pb-2'>
-                                {(() => {
-                                    switch (provider?.id) {
-                                    case 'google':
-                                        return <FontAwesomeIcon icon={faGoogle} />;
-                                    case 'credentials':
-                                        return <FontAwesomeIcon icon={faIdCard} />
-                                    default:
-                                        return <FontAwesomeIcon icon={faSquare} />
-                                    }
-                                })()}
-                                <span className='px-2'>{provider?.name}</span>
-                            </Typography>
-                            {(() => {
-                                switch (provider?.id) {
-                                    case 'google':
-                                        return <GoogleForm provider={provider} />;
-                                    case 'credentials':
-                                        return <CredentialsForm provider={provider} />
-                                    default:
-                                        return <button onClick={() => {signIn(provider.id, {callbackUrl: '/'})}}>Sign in with {provider.name}</button>
-                                    }
-                            })()}
-                        </Fragment>
-                    ))}                
-                    <Link href={'/'}>    
-                        <IconButton className='mt-4'>
-                            <FontAwesomeIcon href="/" icon={faHouse}/>
-                        </IconButton>
-                    </Link>
-                </CardContent>
-            </Card>
-        </Container>
-    )
+    return (<>
+        {providers && Object.values(providers).map((provider, index) => (
+            <Fragment key={provider?.name}>
+                {index!==0 && <Divider className='my-4'/>}
+                <Typography className='pb-2'>
+                    {(() => {
+                        switch (provider?.id) {
+                        case 'google':
+                            return <FontAwesomeIcon icon={faGoogle} />;
+                        case 'credentials':
+                            return <FontAwesomeIcon icon={faIdCard} />
+                        default:
+                            return <FontAwesomeIcon icon={faSquare} />
+                        }
+                    })()}
+                    <span className='px-2'>{provider?.name}</span>
+                </Typography>
+                {(() => {
+                    switch (provider?.id) {
+                        case 'google':
+                            return <GoogleForm provider={provider} />;
+                        case 'credentials':
+                            return <CredentialsForm provider={provider} />
+                        default:
+                            return <button onClick={() => {signIn(provider.id, {callbackUrl: '/'})}}>Sign in with {provider.name}</button>
+                        }
+                })()}
+            </Fragment>
+        ))}
+    </>)
 }

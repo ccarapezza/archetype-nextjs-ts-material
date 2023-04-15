@@ -6,7 +6,7 @@ import Header from './Header';
 import theme from '@/src/theme';
 import Copyright from '../Copyright';
 import { useSession } from "next-auth/react"
-import MainChatBox from '../chat/MainChatBox';
+import MainChatBox from '../chat/MainChat/MainChatBox';
 import FloatingArea from '../FloatingArea';
 import ChatContextProvider from '../chat/ChatContext';
 import P2PChatBox from '../chat/P2PChatBox';
@@ -17,12 +17,15 @@ const drawerWidth = 256;
 export default function Layout({ children } : { children: React.ReactNode }) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const isSmUp = useMediaQuery(theme.breakpoints.up('sm'));
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
+  if(status!== 'authenticated'){
+    return (<Box sx={{ display: 'flex', minHeight: '100vh' }}>{ children }</Box>)
+  }
 
   return (<>
     <Box sx={{ display: 'flex', minHeight: '100vh' }}>
