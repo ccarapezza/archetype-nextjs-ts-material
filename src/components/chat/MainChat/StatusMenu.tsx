@@ -1,9 +1,7 @@
 import { Circle, Logout, MoreVert } from '@mui/icons-material'
 import { Divider, IconButton, ListItemIcon, ListItemText, Menu, MenuItem, MenuList } from '@mui/material'
 import React, { useContext } from 'react'
-import { useSession } from 'next-auth/react';
 import { ChatContext } from '../ChatContext';
-import UserChatState from '@/src/enums/UserChatState';
 import StatusDataList from './StatusDataList';
 
 

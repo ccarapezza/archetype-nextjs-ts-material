@@ -19,6 +19,7 @@ export default function SignIn({providers}: {providers: Record<LiteralUnion<Buil
   }
   return (
     <Container className='bg-slate-200 flex items-center justify-center w-100 max-w-none'>
+      {status === "loading" && <p>Loading...</p>}
         <Card className='max-w-sm w-96'>
             <CardHeader title="Sign in" />
             <CardContent>             

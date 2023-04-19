@@ -3,6 +3,7 @@ import Document, { Html, Head, Main, NextScript } from 'next/document';
 import createEmotionServer from '@emotion/server/create-instance';
 import theme, { roboto } from '@/src/theme';
 import createEmotionCache from '@/src/createEmotionCache';
+import loader from "@/src/loader";
 
 export default class MyDocument extends Document {
   render() {
@@ -15,7 +16,14 @@ export default class MyDocument extends Document {
           <meta name="emotion-insertion-point" content="" />
           {(this.props as any).emotionStyleTags}
         </Head>
+        <head><style>{loader}</style></head>
         <body>
+          <div id={'globalLoader'}>
+            <div className="loader">
+              <div/>
+              <div/>
+            </div>
+          </div>
           <Main />
           <NextScript />
         </body>
